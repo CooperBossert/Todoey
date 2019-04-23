@@ -13,9 +13,16 @@ class TodoListViewController: UITableViewController {
     //Var = mutable, let = immutable
     var itemArray = ["Find Mike", "Buy Eggos", "Destroy Demogorgon"]
     
+    //For saving to local storage
+    var defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        //Load prior data
+        if let items = defaults.array(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        }
     }
     
     //MARK: - Tableview Datasource Methods
@@ -64,6 +71,8 @@ class TodoListViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             //What will happen once the user clicks the 'Add Item' button on our UIAlert
             self.itemArray.append(textField.text!)
+            //Save new itemArray
+            self.defaults.set(self.itemArray, forKey: "TodoListArray")
             //Reload tableview data
             self.tableView.reloadData()
         }
